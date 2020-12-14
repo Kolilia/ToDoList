@@ -3,11 +3,7 @@ module.exports = {
 		browser: true,
 		node: true,
 	},
-	extends: [
-		"eslint:recommended",
-		"plugin:prettier/recommended",
-		"plugin:react/recommended",
-	],
+	extends: ["eslint:recommended", "plugin:react/recommended"],
 	parser: "babel-eslint",
 	parserOptions: {
 		ecmaVersion: 2018,
@@ -25,6 +21,7 @@ module.exports = {
 				fileInfoOptions: {
 					withNodeModules: true,
 				},
+				endOfLine: "auto",
 			},
 		],
 		"react-hooks/rules-of-hooks": "error",
@@ -32,6 +29,7 @@ module.exports = {
 		"react/prop-types": 0,
 		"react/display-name": 0,
 		"react/jsx-uses-vars": 2,
+		"no-mixed-spaces-and-tabs": 0,
 	},
 	settings: {
 		react: {
