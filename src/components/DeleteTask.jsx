@@ -100,7 +100,7 @@ function DeleteTask({ open, setOpen, data, fetchData, setData }) {
 				<IconButton onClick={close} className={classes.close}>
 					<Close />
 				</IconButton>
-				Delete Task({data?.title})
+				Удалить Задачу({data?.title})
 			</DialogTitle>
 			<DialogContent>
 				<p className={classes.text}>

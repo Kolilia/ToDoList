@@ -1,9 +1,12 @@
 import {
+	Divider,
 	IconButton,
 	LinearProgress,
 	List,
 	ListItem,
 	ListItemText,
+	MenuItem,
+	TextField,
 } from "@material-ui/core"
 import { green, grey } from "@material-ui/core/colors"
 import { makeStyles } from "@material-ui/core/styles"
@@ -11,6 +14,7 @@ import { Add, Check, Delete } from "@material-ui/icons"
 import axios from "axios"
 import React, { useCallback, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
+import AddTask from "./AddTask"
 import DeleteTask from "./DeleteTask"
 
 const useStyles = makeStyles({
@@ -35,6 +39,14 @@ const useStyles = makeStyles({
 	completeTask: {
 		backgroundColor: green[300],
 	},
+	actions: {
+		display: "flex",
+		justifyContent: "space-between",
+		marginBottom: ".7rem",
+	},
+	line: {
+		marginBottom: ".7rem",
+	},
 })
 
 function Tasks() {
@@ -44,6 +56,10 @@ function Tasks() {
 	const [loading, setLoading] = useState(false)
 	const [currentDelete, setCurrentDelete] = useState({})
 	const [openDelete, setOpenDelete] = useState(false)
+	const [openAdd, setOpenAdd] = useState(false)
+	const [showFilter, setShowFilter] = useState("All")
+
+	const [intermediateData, setIntermediateData] = useState(false)
 
 	const fetchData = useCallback(async function () {
 		setLoading(true)
@@ -54,6 +70,7 @@ function Tasks() {
 
 		if (data) {
 			setData(data)
+			setIntermediateData(data)
 		}
 
 		setLoading(false)
@@ -127,16 +144,73 @@ function Tasks() {
 		)
 	})
 
+	function openDialogAdd() {
+		setOpenAdd(true)
+	}
+
+	function onChangeFilter(event) {
+		const { value } = event.target
+
+		if (value === "All") {
+			setData(intermediateData)
+		}
+		if (value === "Completed") {
+			setData(
+				intermediateData.filter(function (item) {
+					return item?.completed === true
+				}),
+			)
+		}
+		if (value === "NotCompleted") {
+			setData(
+				intermediateData.filter(function (item) {
+					return item?.completed === false
+				}),
+			)
+		}
+
+		setShowFilter(value)
+	}
+
 	return (
 		<div>
 			<h1 className={classes.header}>
 				<b>TODO List</b>
 			</h1>
-			<div>
-				<IconButton>
-					<Add />
-				</IconButton>
+			<div className={classes.actions}>
+				<div>
+					<IconButton onClick={openDialogAdd}>
+						<Add />
+					</IconButton>
+				</div>
+				<div>
+					<TextField
+						label="Фильтр"
+						value={showFilter}
+						onChange={onChangeFilter}
+						select
+						fullWidth
+						InputLabelProps={{
+							shrink: true,
+						}}
+					>
+						<MenuItem key="All" value="All">
+							Все
+						</MenuItem>
+						<MenuItem key="Completed" value="Completed">
+							Выполненные
+						</MenuItem>
+						<MenuItem key="NotCompleted" value="NotCompleted">
+							Не выполненные
+						</MenuItem>
+					</TextField>
+				</div>
 			</div>
+
+			<div className={classes.line}>
+				<Divider />
+			</div>
+
 			<div className={classes.content}>
 				{loading && <LinearProgress />}
 				<List>{mapData}</List>
@@ -148,6 +222,14 @@ function Tasks() {
 					setOpen={setOpenDelete}
 					data={currentDelete}
 					setData={setCurrentDelete}
+					fetchData={fetchData}
+				/>
+			)}
+
+			{openAdd && (
+				<AddTask
+					open={openAdd}
+					setOpen={setOpenAdd}
 					fetchData={fetchData}
 				/>
 			)}
