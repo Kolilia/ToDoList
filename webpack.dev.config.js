@@ -1,72 +1,52 @@
-const path = require("path");
-
-const webpack = require("webpack");
-
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const path = require("path")
+const webpack = require("webpack")
 
 module.exports = {
-  devtool: "source-map",
-  entry: ["./src/index.jsx"],
-  output: {
-    path: path.resolve(__dirname, "./build"),
-    filename: "[name].js",
-    publicPath: "/",
-  },
-  devServer: {
-    historyApiFallback: true,
-    port: 8000,
-    hot: true,
-    publicPath: "/",
-    host: "localhost",
-    open: true,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(jsx?)$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: "babel-loader",
-            options: {
-              presets: ["@babel/preset-env", "@babel/react"],
-              cacheDirectory: true,
-              plugins: ["react-hot-loader/babel"],
-            },
-          },
-        ],
-      },
-
-      {
-        test: /\.(png|gif|jpe?g)$/,
-        use: [
-          {
-            loader: "file-loader",
-            options: {
-              name: "[path][name].[ext]",
-            },
-          },
-          "img-loader",
-        ],
-      },
-    ],
-  },
-
-  plugins: [
-    new webpack.DefinePlugin({
-      "process.env": {
-        devServer: true,
-      },
-    }),
-
-    new webpack.HotModuleReplacementPlugin(),
-
-    new HtmlWebpackPlugin({
-      filename: "index.html",
-      template: "src/index.html",
-    }),
-  ],
-  resolve: {
-    extensions: [".js", ".jsx"],
-  },
-};
+	devtool: "source-map",
+	entry: ["./src/index.jsx"],
+	output: {
+		path: path.resolve(__dirname, "./build"),
+		filename: "[name].js",
+		publicPath: "/",
+	},
+	module: {
+		rules: [
+			{
+				test: /\.m?(js|jsx)$/,
+				exclude: /(node_modules|bower_components)/,
+				use: [
+					{
+						loader: "babel-loader",
+					},
+				],
+			},
+			{
+				test: /\.css$/,
+				use: ["style-loader", "css-loader"],
+			},
+		],
+	},
+	resolve: {
+		extensions: [".js", ".jsx"],
+	},
+	devServer: {
+		index: "index.html",
+		contentBase: path.join(__dirname, "./build/"),
+		publicPath: "/",
+		port: 8000,
+		host: "localhost",
+		historyApiFallback: {
+			disableDotRule: true,
+		},
+		hot: true,
+		hotOnly: true,
+		open: true,
+	},
+	plugins: [
+		new HtmlWebpackPlugin({
+			filename: "index.html",
+			template: "src/index.html",
+		}),
+	],
+}
