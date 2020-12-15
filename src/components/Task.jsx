@@ -144,7 +144,7 @@ function Task() {
 		}
 	}
 
-	async function addItem() {
+	async function editItem() {
 		setTouchesTitle(true)
 
 		if (!payload.title) {
@@ -291,7 +291,7 @@ function Task() {
 										variant="contained"
 										className={classes.confirmButton}
 										disabled={loading}
-										onClick={addItem}
+										onClick={editItem}
 									>
 										Подтвердить
 										{!loading && (
