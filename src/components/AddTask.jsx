@@ -164,7 +164,7 @@ function AddTask({ open, setOpen, fetchData }) {
 					</div>
 					<div className={classes.field}>
 						<FormControlLabel
-							label="Отметить сразу выполненной"
+							label="Отметить задачу выполненной"
 							control={
 								<Switch
 									name="completed"
